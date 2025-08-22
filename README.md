@@ -12,6 +12,8 @@ $ \min (1, \sum\limits_{r,k} {x_{i,j,r}^{k,m,n}})  + \sum\limits_{\mathfrak{r},k
 
 3. The integrated formulation is: \
 ------------------------------------------------------------------------------------------------------------------------------- \
+<img width="370" height="606" alt="wechat_2025-08-22_162320_727" src="https://github.com/user-attachments/assets/4f1dcb91-3f33-4d22-89d0-b16a9e08700b" />
+
 \begin{subequations}
 	\begin{align} \small
 		& obj.: \min \sum\limits{\overline C |{l_{i,j}}|(z_{i,j}-Z_{i,j}^{min})}, \label{pro:obj} \\
