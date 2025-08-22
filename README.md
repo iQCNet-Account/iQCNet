@@ -1,17 +1,17 @@
-1. A typing error in Cons.(13e), the channel visiting constraint
+1. A typing error in Cons.(13e), the channel visiting constraint \
 ------------------------------------------------------------------------------------------------------------------- \
 There is an error in the paper, for the classical request Cons.(13e). The correct (13e) is: \
 $ \sum\limits_{r} {D_r} {x_{i,j,r}^{k,m,n}} \le D, \quad \sum\limits_{k,m,n} {y_{i,j,\mathfrak{r}}^{k,m,n}} \le 1 $ \
--------------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------- \
 
-2. A typing error in Cons.(13g), the fiber capacity visiting constraint
+2. A typing error in Cons.(13g), the fiber capacity visiting constraint \
+------------------------------------------------------------------------------------------------------------------------------- \
+There is an error in the paper, for the classical request Cons.(13g). The correct (13g) is: \
+$ \min (1, \sum\limits_{r,k} {x_{i,j,r}^{k,m,n}})  + \sum\limits_{\mathfrak{r},k} {y_{i,j,\mathfrak{r}}^{k,m,n}}  \leqslant K $ \
+------------------------------------------------------------------------------------------------------------------------------- \
 
--------------------------------------------------------------------------------------------------------------------------------
-There is an error in the paper, for the classical request Cons.(13g). The correct (13g) is:
-$ \min (1, \sum\limits_{r,k} {x_{i,j,r}^{k,m,n}})  + \sum\limits_{\mathfrak{r},k} {y_{i,j,\mathfrak{r}}^{k,m,n}}  \leqslant K $
--------------------------------------------------------------------------------------------------------------------------------
-
-The integrated formulation is: \\
+3. The integrated formulation is: \
+------------------------------------------------------------------------------------------------------------------------------- \
 \begin{subequations}
 	\begin{align} \small
 		& obj.: \min \sum\limits{\overline C |{l_{i,j}}|(z_{i,j}-Z_{i,j}^{min})}, \label{pro:obj} \\
