@@ -1,10 +1,8 @@
-1. \\
-# channel visiting constraint
-# Constraint (13e)
-# -------------------------------------------------------------------------------------------------------------------
-# there is an error in the paper, for the classical request Cons.(13e). The correct (13e) is:
-# $ \sum\limits_{r} {D_r} {x_{i,j,r}^{k,m,n}} \le D, \quad \sum\limits_{k,m,n} {y_{i,j,\mathfrak{r}}^{k,m,n}} \le 1 $
-# -------------------------------------------------------------------------------------------------------------------
+1. A typing error in Cons.(13e), the channel visiting constraint
+-------------------------------------------------------------------------------------------------------------------
+There is an error in the paper, for the classical request Cons.(13e). The correct (13e) is:
+$ \sum\limits_{r} {D_r} {x_{i,j,r}^{k,m,n}} \le D, \quad \sum\limits_{k,m,n} {y_{i,j,\mathfrak{r}}^{k,m,n}} \le 1 $
+-------------------------------------------------------------------------------------------------------------------
 
 2. \\
 3. # The fiber capacity constraint
