@@ -1,16 +1,15 @@
 1. A typing error in Cons.(13e), the channel visiting constraint
--------------------------------------------------------------------------------------------------------------------
-There is an error in the paper, for the classical request Cons.(13e). The correct (13e) is:
-$ \sum\limits_{r} {D_r} {x_{i,j,r}^{k,m,n}} \le D, \quad \sum\limits_{k,m,n} {y_{i,j,\mathfrak{r}}^{k,m,n}} \le 1 $
+------------------------------------------------------------------------------------------------------------------- \
+There is an error in the paper, for the classical request Cons.(13e). The correct (13e) is: \
+$ \sum\limits_{r} {D_r} {x_{i,j,r}^{k,m,n}} \le D, \quad \sum\limits_{k,m,n} {y_{i,j,\mathfrak{r}}^{k,m,n}} \le 1 $ \
 -------------------------------------------------------------------------------------------------------------------
 
-2. \\
-3. # The fiber capacity constraint
-# Constraint (13g) --> Constraint (20)
-# -------------------------------------------------------------------------------------------------------------------------------
-# there is an error in the paper, for the classical request Cons.(13g). The correct (13g) is:
-# $ \min (1, \sum\limits_{r,k} {x_{i,j,r}^{k,m,n}})  + \sum\limits_{\mathfrak{r},k} {y_{i,j,\mathfrak{r}}^{k,m,n}}  \leqslant K $
-# -------------------------------------------------------------------------------------------------------------------------------
+2. A typing error in Cons.(13g), the fiber capacity visiting constraint
+
+-------------------------------------------------------------------------------------------------------------------------------
+There is an error in the paper, for the classical request Cons.(13g). The correct (13g) is:
+$ \min (1, \sum\limits_{r,k} {x_{i,j,r}^{k,m,n}})  + \sum\limits_{\mathfrak{r},k} {y_{i,j,\mathfrak{r}}^{k,m,n}}  \leqslant K $
+-------------------------------------------------------------------------------------------------------------------------------
 
 The integrated formulation is: \\
 \begin{subequations}
