@@ -16,7 +16,7 @@ y = model.addVars(NODE_NUM, NODE_NUM, QR_NUM, CHANNEL_NUM, FIBER_NUM, N_NUM, vty
 # define the objective
 model.setObjective(0, gp.GRB.MINIMIZE)
 
-# define the flow reservation constraint for the classical request
+# Define the flow reservation constraint for the classical request
 # Constraint (13b)
 model.addConstrs(
     gp.quicksum(
@@ -57,7 +57,7 @@ model.addConstrs(
     for r in range(CR_NUM)
 )
 
-# define the flow reservation constraint for the quantum request
+# Define the flow reservation constraint for the quantum request
 # Constraint (13c)
 model.addConstrs(
     gp.quicksum(
@@ -98,43 +98,86 @@ model.addConstrs(
     for r in range(QR_NUM)
 )
 
-# define the transmission requirement of the quantum request
-# Constraint (13d)
+
+# Define the transmission requirement of the quantum request
+# Constraint (13d) --> Constraint (18,19)
+# -------------------------------------------------------------------------------------------------------------------------------
+# 1. Add the auxiliary variable w_{i,j,r,r'}^{k,kk,m,n}, v_{i,j,r,r'}^{k,kk,ll,m,n}
+w = model.addVars(NODE_NUM, NODE_NUM, CR_NUM, QR_NUM, CHANNEL_NUM, CHANNEL_NUM, FIBER_NUM, N_NUM, vtype=gp.GRB.BINARY, name="w")
+v = model.addVars(NODE_NUM, NODE_NUM, CR_NUM, QR_NUM, CHANNEL_NUM, CHANNEL_NUM, CHANNEL_NUM, FIBER_NUM, N_NUM, vtype=gp.GRB.BINARY, name="v")
 model.addConstrs(
-    gp.quicksum(
-        y[i,j,r,k,m,n] * (
-            math.pow((
-                (
-                    gp.quicksum(
-                        ((math.pow(10, -3.5 + (alpha * edge[i][j])/10)) * math.exp(-alpha * edge[i][j]) * edge[i][j] * delta_lambda * T_d * eta_d / (2 * h * LIGHT_SPEED)) *
-                        x[i,j,r,kk,m,n] * TOTAL_LAMBDA[k] * RHO[kk][k]
-                        +
-                        ((math.pow(10, -3.5 + (alpha * edge[i][j])/10)) * ((1-math.exp(-2*alpha*edge[i][j]))/(2*alpha)) * delta_lambda * T_d * eta_d / (2 * h * LIGHT_SPEED)) *
-                        x[j,i,r,kk,m,n] * TOTAL_LAMBDA[k] * RHO[kk][k]
-                    )
-                    for kk in range(CHANNEL_NUM)
-                )
-            ),2) - 2*(1-p_dc)*(
-                (
-                    gp.quicksum(
-                        ((math.pow(10, -3.5 + (alpha * edge[i][j])/10)) * math.exp(-alpha * edge[i][j]) * edge[i][j] * delta_lambda * T_d * eta_d / (2 * h * LIGHT_SPEED)) *
-                        x[i,j,r,kk,m,n] * TOTAL_LAMBDA[k] * RHO[kk][k]
-                        +
-                        ((math.pow(10, -3.5 + (alpha * edge[i][j])/10)) * ((1-math.exp(-2*alpha*edge[i][j]))/(2*alpha)) * delta_lambda * T_d * eta_d / (2 * h * LIGHT_SPEED)) *
-                        x[j,i,r,kk,m,n] * TOTAL_LAMBDA[k] * RHO[kk][k]
-                    )
-                    for kk in range(CHANNEL_NUM)
-                )
-        ) - (2*p_dc-math.pow(p_dc,2))
-        )
-        for k in range(CHANNEL_NUM)
-        for m in range(FIBER_NUM)
-        for n in range(N_NUM)
-    ) <= qr[r][2] * Ts
-    for r in range(QR_NUM)
+    w[i,j,r,rr,k,kk,m,n] <= y[i,j,rr,k,m,n]
     for i in range(NODE_NUM)
     for j in range(NODE_NUM)
+    for r in range(CR_NUM)
+    for rr in range(QR_NUM)
+    for k in range(CHANNEL_NUM)
+    for kk in range(CHANNEL_NUM)
+    for m in range(FIBER_NUM)
+    for n in range(N_NUM)
 )
+model.addConstrs(
+    w[i,j,r,rr,k,kk,m,n] <= x[i,j,r,kk,m,n]
+    for i in range(NODE_NUM)
+    for j in range(NODE_NUM)
+    for r in range(CR_NUM)
+    for rr in range(QR_NUM)
+    for k in range(CHANNEL_NUM)
+    for kk in range(CHANNEL_NUM)
+    for m in range(FIBER_NUM)
+    for n in range(N_NUM)
+)
+model.addConstrs(
+    w[i,j,r,rr,k,kk,m,n] >= y[i,j,rr,k,m,n] + x[i,j,r,k,m,n] - 1
+    for i in range(NODE_NUM)
+    for j in range(NODE_NUM)
+    for r in range(CR_NUM)
+    for rr in range(QR_NUM)
+    for k in range(CHANNEL_NUM)
+    for kk in range(CHANNEL_NUM)
+    for m in range(FIBER_NUM)
+    for n in range(N_NUM)
+)
+model.addConstrs(
+    v[i,j,r,rr,k,kk,ll,m,n] >= w[i,j,r,rr,k,kk,m,n]
+    for i in range(NODE_NUM)
+    for j in range(NODE_NUM)
+    for r in range(CR_NUM)
+    for rr in range(QR_NUM)
+    for k in range(CHANNEL_NUM)
+    for kk in range(CHANNEL_NUM)
+    for ll in range(CHANNEL_NUM)
+    for m in range(FIBER_NUM)
+    for n in range(N_NUM)
+    if kk <= ll
+)
+model.addConstrs(
+    v[i,j,r,rr,k,kk,ll,m,n] >= w[i,j,r,rr,k,ll,m,n]
+    for i in range(NODE_NUM)
+    for j in range(NODE_NUM)
+    for r in range(CR_NUM)
+    for rr in range(QR_NUM)
+    for k in range(CHANNEL_NUM)
+    for kk in range(CHANNEL_NUM)
+    for ll in range(CHANNEL_NUM)
+    for m in range(FIBER_NUM)
+    for n in range(N_NUM)
+    if kk <= ll
+)
+model.addConstrs(
+    v[i,j,r,rr,k,kk,ll,m,n] >= w[i,j,r,rr,k,kk,m,n] + w[i,j,r,rr,k,ll,m,n] - 1
+    for i in range(NODE_NUM)
+    for j in range(NODE_NUM)
+    for r in range(CR_NUM)
+    for rr in range(QR_NUM)
+    for k in range(CHANNEL_NUM)
+    for kk in range(CHANNEL_NUM)
+    for ll in range(CHANNEL_NUM)
+    for m in range(FIBER_NUM)
+    for n in range(N_NUM)
+    if kk <= ll
+)
+
 
 # D_ijr_kmn = P(p_ij_kmn)/Ts = (1-math.pow((1-(p_dc + p_ij_kmn)), 2))/Ts
 #
@@ -144,6 +187,7 @@ model.addConstrs(
 # gamma_ij_wmn = I * math.exp(-alpha * edge[i][j]) * edge[i][j] * delta_lambda * T_d * eta_d / (2 * h * LIGHT_SPEED)
 # gamma_ji_wmn = I * ((1-math.exp(-2*alpha*edge[i][j]))/(2*alpha)) * delta_lambda * T_d * eta_d / (2 * h * LIGHT_SPEED)
 # p_ij_kmn = gamma_ij_wmn * ()
+# -------------------------------------------------------------------------------------------------------------------
 
 # channel visiting constraint
 # Constraint (13e)
@@ -199,8 +243,8 @@ model.addConstrs(
     for r in range(CR_NUM)
 )
 
-# the fiber capacity constraint
-#  Constraint (13g) --> Constraint (20)
+# The fiber capacity constraint
+# Constraint (13g) --> Constraint (20)
 # -------------------------------------------------------------------------------------------------------------------------------
 # there is an error in the paper, for the classical request Cons.(13g). The correct (13g) is:
 # $ \min (1, \sum\limits_{r,k} {x_{i,j,r}^{k,m,n}})  + \sum\limits_{\mathfrak{r},k} {y_{i,j,\mathfrak{r}}^{k,m,n}}  \leqslant K $
@@ -244,8 +288,8 @@ model.addConstrs(
     for n in range(N_NUM)
 )
 
-# the cable capacity constraint
-#  Constraint (13h) --> Constraint (21)
+# The cable capacity constraint
+# Constraint (13h) --> Constraint (21)
 # -------------------------------------------------------------------------------------------------------------------------------
 # 1. Add the auxiliary variable
 o = model.addVars(NODE_NUM, NODE_NUM, FIBER_NUM, N_NUM, vtype=gp.GRB.BINARY, name="o")
@@ -293,7 +337,8 @@ model.addConstrs(
     for n in range(N_NUM)
 )
 
-# 每个信道被访问的冲突约束
+# The visiting conflict on a channel
+# Constraint (13d) --> Constraint (18,19)
 model.addConstrs(
     x[i,j,r,k,m,n] + y[i,j,_r,k,m,n] <= 1
     for i in range(NODE_NUM)
@@ -303,7 +348,6 @@ model.addConstrs(
     for k in range(CHANNEL_NUM)
     for m in range(FIBER_NUM)
     for n in range(N_NUM)
-
 )
 
 model.optimize()
