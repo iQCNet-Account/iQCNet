@@ -2,6 +2,7 @@
 ------------------------------------------------------------------------------------------------------------------- \
 There is an error in the paper, for the classical request Cons.(13e). The correct (13e) is: \
 <img width="367" height="44" alt="wechat_2025-08-22_162457_502" src="https://github.com/user-attachments/assets/821b6a9e-9fda-4b70-8b9a-f14db2b684b2" />
+
 $ \sum\limits_{r} {D_r} {x_{i,j,r}^{k,m,n}} \le D, \quad \sum\limits_{k,m,n} {y_{i,j,\mathfrak{r}}^{k,m,n}} \le 1 $ \
 ------------------------------------------------------------------------------------------------------------------- \
 
@@ -9,6 +10,7 @@ $ \sum\limits_{r} {D_r} {x_{i,j,r}^{k,m,n}} \le D, \quad \sum\limits_{k,m,n} {y_
 ------------------------------------------------------------------------------------------------------------------------------- \
 There is an error in the paper, for the classical request Cons.(13g). The correct (13g) is: \
 <img width="358" height="43" alt="wechat_2025-08-22_162510_136" src="https://github.com/user-attachments/assets/fb1922e7-f226-4fb4-ba78-ba02d8fcc00e" />
+
 $ \min (1, \sum\limits_{r,k} {x_{i,j,r}^{k,m,n}})  + \sum\limits_{\mathfrak{r},k} {y_{i,j,\mathfrak{r}}^{k,m,n}}  \leqslant K $ \
 ------------------------------------------------------------------------------------------------------------------------------- \
 
