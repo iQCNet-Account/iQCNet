@@ -1,11 +1,13 @@
 1. **A typing error in Cons.(13e), the channel visiting constraint** \
 There is an error in the paper, for the classical request Cons.(13e). The correct (13e) is: \
 <img width="367" height="44" alt="wechat_2025-08-22_162457_502" src="https://github.com/user-attachments/assets/821b6a9e-9fda-4b70-8b9a-f14db2b684b2" />
+
 ------------------------------------------------------------------------------------------------------------------- 
 
 2. **A typing error in Cons.(13g), the fiber capacity visiting constraint** \
 There is an error in the paper, for the classical request Cons.(13g). The correct (13g) is: \
 <img width="358" height="43" alt="wechat_2025-08-22_162510_136" src="https://github.com/user-attachments/assets/fb1922e7-f226-4fb4-ba78-ba02d8fcc00e" />
+
 ------------------------------------------------------------------------------------------------------------------------------- 
 
 3. **The integrated formulation is:** \
