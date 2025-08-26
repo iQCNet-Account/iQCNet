@@ -1,3 +1,5 @@
+import math
+
 import gurobipy as gp
 from gurobipy import GRB
 from tools import *
@@ -177,17 +179,54 @@ model.addConstrs(
     for n in range(N_NUM)
     if kk <= ll
 )
+def get_Lambda(i,j,k,kk):
+    # 激光器的发射功率
+    I = math.pow(10, -3.5 + (alpha * edge[i][j]) / 10)  # mW
+    gamma_ij_wmn = I * math.exp(-alpha * edge[i][j]) * edge[i][j] * delta_lambda * T_d * eta_d / (2 * h * LIGHT_SPEED)
+    lambda_qij_kmn = gamma_ij_wmn * TOTAL_LAMBDA[k] * RHO[k][kk]
+    gamma_ji_wmn = I * ((1 - math.exp(-2 * alpha * edge[i][j])) / (2 * alpha)) * delta_lambda * T_d * eta_d / (
+                2 * h * LIGHT_SPEED)
+    lambda_qji_kmn = gamma_ji_wmn * TOTAL_LAMBDA[k] * RHO[k][kk]
+    Lambda_kk = lambda_qij_kmn + lambda_qji_kmn
+    return Lambda_kk
 
-
-# D_ijr_kmn = P(p_ij_kmn)/Ts = (1-math.pow((1-(p_dc + p_ij_kmn)), 2))/Ts
-#
-# # 激光器的发射功率
-# I = math.pow(10, -3.5 + (alpha * edge[i][j])/10) # mW
-#
-# gamma_ij_wmn = I * math.exp(-alpha * edge[i][j]) * edge[i][j] * delta_lambda * T_d * eta_d / (2 * h * LIGHT_SPEED)
-# gamma_ji_wmn = I * ((1-math.exp(-2*alpha*edge[i][j]))/(2*alpha)) * delta_lambda * T_d * eta_d / (2 * h * LIGHT_SPEED)
-# p_ij_kmn = gamma_ij_wmn * ()
-# -------------------------------------------------------------------------------------------------------------------
+model.addConstrs(
+    gp.quicksum(
+        math.pow(get_Lambda(i,j,k,kk),2) * w[i,j,r,rr,k,kk,m,n]
+        for r in range(CR_NUM)
+        for k in range(CHANNEL_NUM)
+        for kk in range(CHANNEL_NUM)
+        for ll in range(CHANNEL_NUM)
+        for m in range(FIBER_NUM)
+        for n in range(N_NUM)
+        if kk <= ll and k != kk and k!=ll
+    ) + 2 * gp.quicksum(
+        get_Lambda(i,j,k,kk) * get_Lambda(i,j,k,ll) * v[i,j,r,rr,k,kk,ll,m,n]
+        for r in range(CR_NUM)
+        for k in range(CHANNEL_NUM)
+        for kk in range(CHANNEL_NUM)
+        for ll in range(CHANNEL_NUM)
+        for m in range(FIBER_NUM)
+        for n in range(N_NUM)
+        if kk <= ll and k != kk and k!=ll
+    ) + gp.quicksum(
+        2*(p_dc-1)*get_Lambda(i,j,k,kk) * w[i,j,r,rr,k,kk,m,n]
+        for r in range(CR_NUM)
+        for k in range(CHANNEL_NUM)
+        for kk in range(CHANNEL_NUM)
+        for m in range(FIBER_NUM)
+        for n in range(N_NUM)
+    ) + gp.quicksum(
+        (math.pow(p_dc, 2)-2*p_dc) * y[i,j,r,k,m,n]
+        for r in range(CR_NUM)
+        for k in range(CHANNEL_NUM)
+        for m in range(FIBER_NUM)
+        for n in range(N_NUM)
+    ) <= qr[rr][2] * Ts
+    for rr in range(QR_NUM)
+    for i in range(NODE_NUM)
+    for j in range(NODE_NUM)
+)
 
 # channel visiting constraint
 # Constraint (13e)
