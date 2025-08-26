@@ -18,11 +18,11 @@ K = CHANNEL_NUM
 FIBER_NUM = 10
 M = FIBER_NUM
 
-# # 符号率 Baud Rate
-# R_s = 32 # GBaud, 32G符号/秒
-# # 调制阶数 QAM
-# M = 64 # 16bits/符号
-# eta = 2  # 双偏振
+# # Baud Rate
+# R_s = 32 # GBaud, 32G Baud/s
+# # QAM
+# M = 64 # 16 bits/Baud
+# eta = 2  # Double polarization
 # R_b = R_s * 4 * eta
 # print(R_b)
 R_b = 256 # Gbps
@@ -36,7 +36,7 @@ LAMBDA_MID = 1550 # nm
 # print(TOTAL_LAMBDA)
 TOTAL_LAMBDA = [1530.0, 1530.625, 1531.25, 1531.875, 1532.5, 1533.125, 1533.75, 1534.375, 1535.0, 1535.625, 1536.25, 1536.875, 1537.5, 1538.125, 1538.75, 1539.375, 1540.0, 1540.625, 1541.25, 1541.875, 1542.5, 1543.125, 1543.75, 1544.375, 1545.0, 1545.625, 1546.25, 1546.875, 1547.5, 1548.125, 1548.75, 1549.375, 1550.0, 1550.625, 1551.25, 1551.875, 1552.5, 1553.125, 1553.75, 1554.375, 1555.0, 1555.625, 1556.25, 1556.875, 1557.5, 1558.125, 1558.75, 1559.375, 1560.0, 1560.625, 1561.25, 1561.875, 1562.5, 1563.125, 1563.75, 1564.375, 1565.0]
 
-# 读标准测量曲线表
+# Read the standard measurement curve in Fig.2, and conduct the Rho table
 # import pandas as pd
 # RHO_FIG = pd.read_csv("./wavelength.csv", header=None, names=['wavelength', 'rho'])
 # RHO_TABLE = [[0 for j in range(CHANNEL_NUM)] for i in range(CHANNEL_NUM)]
@@ -53,21 +53,21 @@ TOTAL_LAMBDA = [1530.0, 1530.625, 1531.25, 1531.875, 1532.5, 1533.125, 1533.75, 
 # pd.DataFrame(RHO_TABLE).to_csv('./rho.csv', index=False)
 RHO = pd.read_csv("./rho.csv", skiprows=0).values
 
-# 雷达脉动时间间隔
+# Radar pulse interval
 Ts = 250 * math.pow(10, -12)# ps-->
-# 发射器得光子暗计数率
+# Dark count rate of photons for the emitter
 gamma_dc = math.pow(10,-7) * math.pow(10,9) # /ns-->s
-# 时间网关间隔，窗口时间间隔
+# Time gateway interval, window time interval
 T_d = 100 * math.pow(10, -12) # /ps-->s
 p_dc = gamma_dc * T_d
 
 
-# Plank's constant, J.S, 描述能量与频率之间得关系
+# Plank's constant, J.S, describe the relationship between energy and frequency
 h = 6.62607015 * math.pow(10, -34)
 # quantum efficiency
 eta_d = 0.3
 # the energy bandwidth of the quantum receiver
-delta_lambda = 3.1 # eV, 对应T_d
+delta_lambda = 3.1 # eV, responding to T_d
 # the fiber attenuation coefficient
 alpha = 0.2 # dB/km
 
